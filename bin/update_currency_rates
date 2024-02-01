@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path('lib', File.dirname(__FILE__) + '/..')
+
+require 'currency_rates_bot'
+
+CurrencyRatesBot.initialize!
+
+CurrencyRatesBot.logger.info('Starting update currency rates')
+
+Updater.run

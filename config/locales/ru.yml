@@ -1,0 +1,6 @@
+ru:
+  welcome: 'Добро пожаловать, %{name}!'
+  bye: 'Всего хорошего, %{name}!'
+  unknown_message_type: 'Неизвестный тип сообщения!'
+  unclear_message: 'Непонятное сообщение!'
+  access_denied: 'Доступ запрещен!'

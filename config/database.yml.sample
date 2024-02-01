@@ -1,0 +1,8 @@
+adapter: postgresql
+encoding: unicode
+host: <%= (ENV['CURRENCY_RATES_BOT_PSQL_HOST'] || 'localhost') %>
+reconnect: false
+pool: 5
+username: ''
+password: ''
+database: ''

@@ -1,1 +1,1 @@
-# currency_rates_bot
+# Currency Rates Bot
