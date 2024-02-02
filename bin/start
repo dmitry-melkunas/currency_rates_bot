@@ -4,6 +4,8 @@ $:.unshift File.expand_path('lib', File.dirname(__FILE__) + '/..')
 
 require 'currency_rates_bot'
 
+system('whenever --update-crontab') # update crontab from config/schedule.rb
+
 CurrencyRatesBot.initialize!
 
 CurrencyRatesBot.logger.info('Starting telegram bot')

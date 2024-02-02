@@ -55,3 +55,9 @@ namespace :db do
     ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths.first).rollback(step)
   end
 end
+
+desc 'Update currency rates'
+task :update_currency_rates do
+  CurrencyRatesBot.logger.info('[Rake] Starting update currency rates')
+  Updater.run
+end

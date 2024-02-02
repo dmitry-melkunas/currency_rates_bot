@@ -9,6 +9,7 @@ gem 'i18n', '~> 1.14', '>= 1.14.1'
 gem 'json', '~> 2.7', '>= 2.7.1'
 gem 'rake', '~> 13.1'
 gem 'settingslogic', '~> 2.0', '>= 2.0.9'
+gem 'whenever', '~> 1.0', require: false
 gem 'yaml', '~> 0.3.0'
 
 # postgresql adapter

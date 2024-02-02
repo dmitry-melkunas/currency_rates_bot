@@ -1,0 +1,3 @@
+#!/bin/sh
+
+tail -40 /var/log/syslog | grep -i CRON

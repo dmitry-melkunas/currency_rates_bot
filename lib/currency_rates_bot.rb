@@ -21,8 +21,8 @@ module CurrencyRatesBot
     end
 
     def initialize!
-      establish_db_connection
       load_settings
+      establish_db_connection
       define_internalization
     end
 
@@ -59,7 +59,7 @@ module CurrencyRatesBot
     end
 
     def logger
-      @logger ||= Logger.new("#{root}/tmp/logs.log",
+      @logger ||= Logger.new("#{root}/logs/app.log",
                              'weekly',
                              datetime_format: '%Y-%m-%d %H:%M:%S',
                              progname: 'CurrencyRatesBot',
