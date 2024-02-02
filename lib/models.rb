@@ -2,4 +2,5 @@
 
 require 'models/users'
 require 'models/currency_rates'
-require 'models/currency_rates_history'
+require 'models/currency_rates_histories'
+require 'models/user_operations'

@@ -1,10 +1,13 @@
 debug_mode: false
-currency_rates:
-  urls:
-    bnb: ''
 telegram:
   bots:
     default:
       token: ''
     error_notifier:
       token: ''
+currency_rates:
+  urls:
+    bnb:
+      in_bank: ''
+      by_card: ''
+      online: ''

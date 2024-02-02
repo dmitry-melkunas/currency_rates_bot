@@ -45,7 +45,7 @@ module CurrencyRatesBot
       I18n.backend.load_translations
     end
 
-    def currency_rates_urls
+    def currency_rates_bank_urls
       @currency_rates_urls ||= CurrencyRatesBot::Settings.currency_rates.urls
     end
 
@@ -70,3 +70,4 @@ end
 require 'models'
 require 'listener'
 require 'updater'
+require 'notifier'

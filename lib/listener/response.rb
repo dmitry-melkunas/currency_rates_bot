@@ -2,12 +2,10 @@
 
 class Listener
   module Response
-    def standard_message(bot, message_object, message)
-      bot.api.send_message(chat_id: message_object.chat.id, text: message)
+    def standard_message(bot, id, message)
+      bot.api.send_message(chat_id: id, text: message)
     end
 
-    module_function(
-      :standard_message
-    )
+    module_function(:standard_message)
   end
 end

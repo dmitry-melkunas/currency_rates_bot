@@ -3,14 +3,14 @@
 class Listener
   module Handler
     module Message
-      def process(bot, message_object)
+      def process(bot, user_info, message_object)
         case message_object.text
         when '/start'
-          Response.standard_message(bot, message_object, I18n.t('welcome', name: message_object.from.first_name))
+          Response.standard_message(bot, user_info['chat_id'], I18n.t('welcome', name: user_info['first_name'].presence || user_info['username']))
         when '/end'
-          Response.standard_message(bot, message_object, I18n.t('bye', name: message_object.from.first_name))
+          Response.standard_message(bot, user_info['chat_id'], I18n.t('bye', name: user_info['first_name'].presence || user_info['username']))
         else
-          Response.standard_message(bot, message_object, I18n.t('unclear_message'))
+          Response.standard_message(bot, user_info['chat_id'], I18n.t('unclear_message'))
         end
       end
 

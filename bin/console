@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path('lib', File.dirname(__FILE__) + '/..')
+
+require 'rubygems'
+require 'bundler'
+Bundler.setup :default
+
+require 'currency_rates_bot'
+
+CurrencyRatesBot.initialize!
+
+require 'irb'
+IRB.start

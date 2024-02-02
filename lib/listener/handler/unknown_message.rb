@@ -3,8 +3,8 @@
 class Listener
   module Handler
     module UnknownMessage
-      def process(bot, message_object)
-        Response.standard_message(bot, message_object, I18n.t('unknown_message_type'))
+      def process(bot, user_info)
+        Response.standard_message(bot, user_info['chat_id'], I18n.t('unknown_message_type'))
       end
 
       module_function(:process)

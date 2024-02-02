@@ -2,17 +2,16 @@
 
 class Listener
   module Handler
-    module CallBackMessage
+    module CallbackMessage
       def process(bot, message_object)
-        case message_object.text
-        when '/start'
-          Response.standard_message(bot, message_object, I18n.t('welcome', name: message_object.from.first_name))
-        when '/end'
-          Response.standard_message(bot, message_object, I18n.t('bye', name: message_object.from.first_name))
-        else
-          Response.standard_message(bot, message_object, I18n.t('unclear_message'))
-        end
-
+        # case message_object.text
+        # when '/start'
+        #   Response.standard_message(bot, message_object, I18n.t('welcome', name: message_object.from.first_name))
+        # when '/end'
+        #   Response.standard_message(bot, message_object, I18n.t('bye', name: message_object.from.first_name))
+        # else
+        #   Response.standard_message(bot, message_object, I18n.t('unclear_message'))
+        # end
 
         # def process
         #   self.callback_message = Listener.message.message

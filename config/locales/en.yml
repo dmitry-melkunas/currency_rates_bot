@@ -3,4 +3,4 @@ en:
   bye: 'Bye, %{name}!'
   unknown_message_type: 'Unknown message type!'
   unclear_message: 'Unclear message!'
-  access_denied: 'Access denied!'
+  access_denied: 'Access denied! Contact to admin'

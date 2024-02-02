@@ -5,9 +5,11 @@ class CreateUsersTable < ActiveRecord::Migration[7.1]
     return if table_exists? :users
 
     create_table :users do |t|
-      t.string  :name
-      t.string  :chat_id
-      t.boolean :enabled
+      t.string  :first_name
+      t.string  :last_name
+      t.string  :username
+      t.bigint  :chat_id, index: { unique: true }
+      t.boolean :enabled, default: false
       t.string  :language, limit: 2
 
       t.timestamps
