@@ -11,7 +11,7 @@ class Listener
   module Handler
     def process(bot, message_object)
       user_info = Handler::UserInfo.build(message_object)
-      return Handler::AccessDenied.process(bot, user_info['chat_id']) unless passed_authorization?(user_info)
+      return Handler::AccessDenied.process(bot, user_info) unless passed_authorization?(user_info)
 
       parse_message(bot, user_info, message_object)
     end

@@ -28,6 +28,7 @@ module CurrencyRatesBot
 
     def establish_db_connection(config = nil)
       config ||= db_config
+      ActiveRecord::Base.logger = logger
       ActiveRecord::Base.establish_connection(config)
     end
 
