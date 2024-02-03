@@ -4,3 +4,6 @@ ru:
   unknown_message_type: 'Неизвестный тип сообщения!'
   unclear_message: 'Непонятное сообщение!'
   access_denied: 'Доступ запрещен! Обратитесь к администратору'
+  buy: 'купить'
+  sell: 'продать'
+  buy_sell_notification_message: 'Вы можете %{operation_type} %{currency}'

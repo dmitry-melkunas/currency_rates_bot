@@ -7,7 +7,7 @@ class CreateUserOperationsTable < ActiveRecord::Migration[7.1]
     create_table :user_operations do |t|
       t.belongs_to :user
       t.bigint     :chat_id
-      t.string     :type, limit: 4
+      t.string     :operation_type, limit: 4
       t.string     :currency_pair
       t.string     :bank
       t.string     :exchange_type
@@ -19,7 +19,7 @@ class CreateUserOperationsTable < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :user_operations, %i[chat_id type currency_pair bank exchange_type], unique: true
+    add_index :user_operations, %i[chat_id operation_type currency_pair bank exchange_type], unique: true
   end
 
   def down

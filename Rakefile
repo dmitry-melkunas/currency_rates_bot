@@ -5,10 +5,6 @@ $:.unshift File.expand_path('lib', File.dirname(__FILE__))
 require 'rubygems'
 require 'bundler/setup'
 
-require 'pg'
-require 'active_record'
-require 'yaml'
-
 require './lib/currency_rates_bot'
 
 CurrencyRatesBot.initialize!
@@ -56,8 +52,8 @@ namespace :db do
   end
 end
 
-desc 'Update currency rates'
-task :update_currency_rates do
-  CurrencyRatesBot.logger.info('[Rake] Starting update currency rates')
+desc 'Update currency rates and notify'
+task :update_currency_rates_and_notify do
+  CurrencyRatesBot.logger.info('[Rake] Starting update currency rates and notify')
   Updater.run
 end

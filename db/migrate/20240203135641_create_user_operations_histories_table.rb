@@ -7,7 +7,7 @@ class CreateUserOperationsHistoriesTable < ActiveRecord::Migration[7.1]
     create_table :user_operations_histories do |t|
       t.belongs_to :user
       t.bigint     :chat_id, index: true
-      t.string     :type, limit: 4
+      t.string     :operation_type, limit: 4
       t.string     :currency_pair
       t.string     :bank
       t.string     :exchange_type

@@ -4,3 +4,6 @@ en:
   unknown_message_type: 'Unknown message type!'
   unclear_message: 'Unclear message!'
   access_denied: 'Access denied! Contact to admin'
+  buy: 'buy'
+  sell: 'sell'
+  buy_sell_notification_message: 'You can %{operation_type} %{currency}'

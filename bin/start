@@ -8,6 +8,6 @@ system('whenever --update-crontab') # update crontab from config/schedule.rb
 
 CurrencyRatesBot.initialize!
 
-CurrencyRatesBot.logger.info('Starting telegram bot')
+# CurrencyRatesBot.logger.info('Starting telegram bot')
 
 Listener.run

@@ -27,8 +27,8 @@ class Updater
 
   def process
     currency_rates = build_params(bank_urls)
-    update_amounts_from(currency_rates)
-    CurrencyRatesBot.logger.info('[Updater] Currency rates successfully updated')
+    update_and_notify_from(currency_rates)
+    CurrencyRatesBot.logger.info('[Updater] Currency rates successfully updated and notified')
   rescue => e
     puts "[Updater] Failed update. Error message: #{e.message}"
     CurrencyRatesBot.logger.error("[Updater] Failed update. Error message: #{e.message}\n"\
@@ -37,18 +37,16 @@ class Updater
 
   private
 
-  def update_amounts_from(currency_rates)
+  def update_and_notify_from(currency_rates)
     currency_rates.each do |bank_name, exchange_type_params|
       exchange_type_params.each do |exchange_type, rates|
-        update_currency_rate(bank_name,
-                             exchange_type,
-                             fetch_amount_from(rates, BUY),
-                             fetch_amount_from(rates, SELL))
+        buy_amount = fetch_amount_from(rates, BUY)
+        sell_amount = fetch_amount_from(rates, SELL)
 
-        process_currency_rate_for_history(bank_name,
-                                          exchange_type,
-                                          fetch_amount_from(rates, BUY),
-                                          fetch_amount_from(rates, SELL))
+        update_currency_rate(bank_name, exchange_type, buy_amount, sell_amount)
+        process_currency_rate_for_history(bank_name, exchange_type, buy_amount, sell_amount)
+
+        notify_users(bank_name, exchange_type, buy_amount, sell_amount)
       end
     end
   end
@@ -97,5 +95,19 @@ class Updater
       sell_amount: sell_am,
       exchange_type: ex_type
     }.compact_blank
+  end
+
+  def notify_users(bank_name, exchange_type, buy_amount, sell_amount)
+    Notifier.new(bot,
+                 DEFAULT_CURRENCY_PAIR,
+                 bank_name,
+                 exchange_type,
+                 buy_amount,
+                 sell_amount).process
+  end
+
+  def bot
+    @bot ||= Telegram::Bot::Client.new(CurrencyRatesBot.telegram_bot_token,
+                                       logger: CurrencyRatesBot.logger)
   end
 end

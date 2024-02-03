@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 require 'active_record'
+require 'pg'
 require 'erb'
 require 'logger'
 require 'active_support/core_ext/string/inflections'
-require 'active_support/core_ext/object/to_query'
-require 'active_support/core_ext/object/with_options'
 require 'active_support/core_ext/numeric/time'
-require 'active_support/security_utils'
 
 # for debugging
 require 'pry'

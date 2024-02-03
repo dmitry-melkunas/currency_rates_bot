@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require 'active_record'
-
 class User < ActiveRecord::Base
-  has_many :user_operation
-  has_many :user_operations_history
+  has_many :user_operations
+  has_many :user_operations_histories
 
   validates_presence_of :chat_id
 

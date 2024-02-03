@@ -30,7 +30,7 @@ class Listener
   private
 
   def bot
-    @bot ||= Telegram::Bot::Client.new(CurrencyRatesBot.telegram_bot_token)
+    @bot ||= Telegram::Bot::Client.new(token, logger: CurrencyRatesBot.logger)
   end
 
   def define_stop_signal_for_bot
