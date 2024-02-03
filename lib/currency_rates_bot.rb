@@ -15,6 +15,10 @@ require 'pry'
 module CurrencyRatesBot
   autoload :Settings, 'currency_rates_bot/settings'
 
+  AVAILABLE_LANGUAGES = %w[en ru].freeze
+  AVAILABLE_OPERATION_TYPES = %w[buy sell].freeze
+  AVAILABLE_EXCHANGE_TYPES = %w[in_bank by_card online].freeze
+
   class << self
     def root
       File.expand_path File.join(File.dirname(__FILE__), '..')
@@ -42,6 +46,7 @@ module CurrencyRatesBot
 
     def define_internalization
       I18n.load_path += Dir["#{File.expand_path('config/locales')}/*.yml"]
+      I18n.available_locales = AVAILABLE_LANGUAGES
       I18n.default_locale = :en
       I18n.backend.load_translations
     end

@@ -4,13 +4,13 @@ require 'active_record'
 
 class User < ActiveRecord::Base
   has_many :user_operation
+  has_many :user_operations_history
 
   validates_presence_of :chat_id
-  validates_length_of :language, maximum: 2
+
+  validates :language, inclusion: CurrencyRatesBot::AVAILABLE_LANGUAGES, length: { maximum: 2 }
 
   def enabled?
     enabled == true
   end
-
-  # TODO: add some validations, methods
 end

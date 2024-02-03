@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class CreateUserOperationsTable < ActiveRecord::Migration[7.1]
+class CreateUserOperationsHistoriesTable < ActiveRecord::Migration[7.1]
   def up
-    return if table_exists? :user_operations
+    return if table_exists? :user_operations_histories
 
-    create_table :user_operations do |t|
+    create_table :user_operations_histories do |t|
       t.belongs_to :user
-      t.bigint     :chat_id
+      t.bigint     :chat_id, index: true
       t.string     :type, limit: 4
       t.string     :currency_pair
       t.string     :bank
@@ -18,11 +18,9 @@ class CreateUserOperationsTable < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
-
-    add_index :user_operations, %i[chat_id type currency_pair bank exchange_type], unique: true
   end
 
   def down
-    drop_table :user_operations if table_exists? :user_operations
+    drop_table :user_operations_histories if table_exists? :user_operations_histories
   end
 end

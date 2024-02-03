@@ -2,7 +2,7 @@
 
 require 'active_record'
 
-class UserOperation < ActiveRecord::Base
+class UserOperationsHistory < ActiveRecord::Base
   belongs_to :user
 
   validates_presence_of :user_id, :chat_id, :type, :currency_pair, :bank, :exchange_type, :currency, :rate_amount,
