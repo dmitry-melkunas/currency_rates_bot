@@ -40,17 +40,17 @@ class Notifier
   end
 
   def process_with_buy_amount(user_operation)
-    if user_operation.rate_amount > sell_amount && user_operation.operation_type == 'buy'
+    if user_operation.rate_amount < sell_amount && user_operation.operation_type == 'buy'
       notify_to('sell', user_operation)
-    elsif user_operation.rate_amount < sell_amount && user_operation.operation_type == 'sell'
+    elsif user_operation.rate_amount > sell_amount && user_operation.operation_type == 'sell'
       notify_to('buy', user_operation)
     end
   end
 
   def process_with_sell_amount(user_operation)
-    if user_operation.rate_amount > buy_amount && user_operation.operation_type == 'sell'
+    if user_operation.rate_amount < buy_amount && user_operation.operation_type == 'sell'
       notify_to('buy', user_operation)
-    elsif user_operation.rate_amount < buy_amount && user_operation.operation_type == 'buy'
+    elsif user_operation.rate_amount > buy_amount && user_operation.operation_type == 'buy'
       notify_to('sell', user_operation)
     end
   end

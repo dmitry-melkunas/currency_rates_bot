@@ -19,7 +19,7 @@ class CreateUserOperationsTable < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :user_operations, %i[chat_id operation_type currency_pair bank exchange_type], unique: true
+    add_index :user_operations, %i[chat_id operation_type currency_pair bank exchange_type currency], unique: true
   end
 
   def down
