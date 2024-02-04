@@ -9,12 +9,12 @@ class CreateCurrencyRatesTable < ActiveRecord::Migration[7.1]
       t.string :bank
       t.float  :buy_amount
       t.float  :sell_amount
-      t.string :exchange_type
+      t.string :exchange_method
 
       t.timestamps
     end
 
-    add_index :currency_rates, %i[currency_pair bank exchange_type], unique: true
+    add_index :currency_rates, %i[currency_pair bank exchange_method], unique: true
   end
 
   def down

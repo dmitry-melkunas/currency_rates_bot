@@ -9,7 +9,7 @@ class CreateCurrencyRatesHistoriesTable < ActiveRecord::Migration[7.1]
       t.string :bank, index: true
       t.float  :buy_amount
       t.float  :sell_amount
-      t.string :exchange_type, index: true
+      t.string :exchange_method, index: true
 
       t.timestamps
     end

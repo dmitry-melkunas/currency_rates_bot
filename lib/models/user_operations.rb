@@ -3,12 +3,11 @@
 class UserOperation < ActiveRecord::Base
   belongs_to :user
 
-  validates_presence_of :user_id, :chat_id, :operation_type, :currency_pair, :bank, :exchange_type, :currency, :rate_amount,
-                        :deposit_amount, :converted_amount
+  validates_presence_of :user_id, :chat_id, :currency_pair, :bank, :exchange_method, :rate_amount, :deposit_amount,
+                        :deposit_currency, :final_amount, :final_currency
 
-  validates :operation_type, inclusion: CurrencyRatesBot::AVAILABLE_OPERATION_TYPES, length: { maximum: 4 }
-  validates :exchange_type, inclusion: CurrencyRatesBot::AVAILABLE_EXCHANGE_TYPES
-  validates :currency, length: { maximum: 3 }
+  validates :exchange_method, inclusion: CurrencyRatesBot::AVAILABLE_EXCHANGE_METHODS
+  validates_length_of :deposit_currency, :final_currency, maximum: 3
 
   def user_by_chat_id
     User.find_by(chat_id: chat_id)
@@ -17,9 +16,10 @@ class UserOperation < ActiveRecord::Base
   def define_rate_amount
     currency_pair_array = currency_pair.split('/')
 
-    case operation_type
-    when 'buy'  then currency_pair_array.index(currency).zero? ? 'sell_amount' : 'buy_amount'
-    when 'sell' then currency_pair_array.index(currency).zero? ? 'buy_amount' : 'sell_amount'
+    if currency_pair_array.index(deposit_currency).zero? && currency_pair_array.index(final_currency) == 1
+      'buy_amount'
+    elsif currency_pair_array.index(final_currency).zero? && currency_pair_array.index(deposit_currency) == 1
+      'sell_amount'
     end
   end
 end

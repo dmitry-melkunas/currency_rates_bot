@@ -4,7 +4,6 @@ require 'uri'
 require 'net/http'
 require 'nokogiri'
 require 'json'
-# require 'money' # TODO: enable if needed
 
 require_relative 'updater/currency_rates_params'
 
@@ -38,15 +37,15 @@ class Updater
   private
 
   def update_and_notify_from(currency_rates)
-    currency_rates.each do |bank_name, exchange_type_params|
-      exchange_type_params.each do |exchange_type, rates|
+    currency_rates.each do |bank_name, exchange_method_params|
+      exchange_method_params.each do |exchange_method, rates|
         buy_amount = fetch_amount_from(rates, BUY)
         sell_amount = fetch_amount_from(rates, SELL)
 
-        update_currency_rate(bank_name, exchange_type, buy_amount, sell_amount)
-        process_currency_rate_for_history(bank_name, exchange_type, buy_amount, sell_amount)
+        update_currency_rate(bank_name, exchange_method, buy_amount, sell_amount)
+        process_currency_rate_for_history(bank_name, exchange_method, buy_amount, sell_amount)
 
-        notify_users(bank_name, exchange_type, buy_amount, sell_amount)
+        notify_users(bank_name, exchange_method, buy_amount, sell_amount)
       end
     end
   end
@@ -55,31 +54,31 @@ class Updater
     rates.dig(DEFAULT_CURRENCY_PAIR.split('/').first, DEFAULT_CURRENCY_PAIR.split('/').last, type)
   end
 
-  def update_currency_rate(bank_name, ex_type, buy_am, sell_am)
+  def update_currency_rate(bank_name, ex_method, buy_am, sell_am)
     currency_rate = CurrencyRate.find_by(currency_pair: DEFAULT_CURRENCY_PAIR,
                                          bank: bank_name,
-                                         exchange_type: ex_type)
+                                         exchange_method: ex_method)
 
     if currency_rate.present?
       currency_rate.update(buy_amount: buy_am, sell_amount: sell_am)
     else
-      CurrencyRate.create(currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_type))
+      CurrencyRate.create(currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_method))
     end
   end
 
-  def process_currency_rate_for_history(bank_name, ex_type, buy_am, sell_am)
+  def process_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am)
     currency_rate_history = CurrencyRatesHistory.where(currency_pair: DEFAULT_CURRENCY_PAIR,
                                                        bank: bank_name,
-                                                       exchange_type: ex_type)&.last
+                                                       exchange_method: ex_method)&.last
 
-    return create_currency_rate_for_history(bank_name, ex_type, buy_am, sell_am) unless currency_rate_history.present?
+    return create_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am) unless currency_rate_history.present?
     return if equal_amounts?(currency_rate_history, buy_am, sell_am)
 
-    create_currency_rate_for_history(bank_name, ex_type, buy_am, sell_am)
+    create_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am)
   end
 
-  def create_currency_rate_for_history(bank_name, ex_type, buy_am, sell_am)
-    CurrencyRatesHistory.create(currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_type))
+  def create_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am)
+    CurrencyRatesHistory.create(currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_method))
   end
 
   def equal_amounts?(currency_rate_history, buy_am, sell_am)
@@ -87,21 +86,21 @@ class Updater
       currency_rate_history.sell_amount == sell_am&.to_f
   end
 
-  def currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_type)
+  def currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_method)
     {
       currency_pair: DEFAULT_CURRENCY_PAIR,
       bank: bank_name,
       buy_amount: buy_am,
       sell_amount: sell_am,
-      exchange_type: ex_type
+      exchange_method: ex_method
     }.compact_blank
   end
 
-  def notify_users(bank_name, exchange_type, buy_amount, sell_amount)
+  def notify_users(bank_name, exchange_method, buy_amount, sell_amount)
     Notifier.new(bot,
                  DEFAULT_CURRENCY_PAIR,
                  bank_name,
-                 exchange_type,
+                 exchange_method,
                  buy_amount,
                  sell_amount).process
   end

@@ -14,8 +14,7 @@ module CurrencyRatesBot
   autoload :Settings, 'currency_rates_bot/settings'
 
   AVAILABLE_LANGUAGES = %w[en ru].freeze
-  AVAILABLE_OPERATION_TYPES = %w[buy sell].freeze
-  AVAILABLE_EXCHANGE_TYPES = %w[in_bank by_card online].freeze
+  AVAILABLE_EXCHANGE_METHODS = %w[in_bank by_card online].freeze
 
   class << self
     def root
