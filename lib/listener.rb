@@ -20,7 +20,11 @@ class Listener
   def listener
     bot
     define_stop_signal_for_bot
-    bot.listen { |message_object| process(bot, message_object) }
+    bot.listen do |response|
+      Thread.start(response) do |message_object|
+        process(bot, message_object)
+      end
+    end
   rescue => e
     puts "[Listener] Immediately stop bot. Error message: #{e.message}"
     CurrencyRatesBot.logger.error('[Listener] Immediately stop bot. '\
