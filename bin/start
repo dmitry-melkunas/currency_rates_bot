@@ -4,7 +4,7 @@ $:.unshift File.expand_path('lib', File.dirname(__FILE__) + '/..')
 
 require 'currency_rates_bot'
 
-system('whenever --update-crontab') # update crontab from config/schedule.rb
+system('whenever --update-crontab CurrencyRatesUpdaterAndNotifier') # update crontab from config/schedule.rb
 
 CurrencyRatesBot.initialize!
 

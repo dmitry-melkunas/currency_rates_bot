@@ -24,11 +24,11 @@ module CurrencyRatesParams
     end
 
     def fetch_in_bank_currency_rates
-      nil # TODO: add if needed
+      nil # add if needed
     end
 
     def fetch_by_card_currency_rates
-      nil # TODO: add if needed
+      nil # add if needed
     end
 
     def fetch_by_online_currency_rates

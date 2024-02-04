@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :user_operations
 
   validates_presence_of :chat_id
+  validates_uniqueness_of :chat_id
 
   validates :language, inclusion: CurrencyRatesBot::AVAILABLE_LANGUAGES, length: { maximum: 2 }
 
