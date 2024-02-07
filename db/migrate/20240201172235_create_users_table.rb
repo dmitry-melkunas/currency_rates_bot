@@ -8,9 +8,11 @@ class CreateUsersTable < ActiveRecord::Migration[7.1]
       t.string  :first_name
       t.string  :last_name
       t.string  :username
-      t.bigint  :chat_id, index: { unique: true }
-      t.boolean :enabled, default: false
-      t.string  :language, limit: 2
+      t.bigint  :chat_id,   index: { unique: true }
+      t.boolean :enabled,   default: false
+      t.boolean :admin,     default: false
+      t.string  :language,  limit: 2
+      t.string  :state
 
       t.timestamps
     end

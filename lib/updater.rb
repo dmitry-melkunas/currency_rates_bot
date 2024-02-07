@@ -8,24 +8,25 @@ require 'json'
 require_relative 'updater/currency_rates_params'
 
 class Updater
-  DEFAULT_CURRENCY_PAIR = 'EUR/USD'
   BUY = 'BUY'
   SELL = 'SALE'
 
   include CurrencyRatesParams
 
-  attr_reader :bank_urls
+  attr_reader :available_currency_pairs, :enabled_banks, :bank_urls
 
   def self.run
     new.process
   end
 
   def initialize
+    @available_currency_pairs = CurrencyRatesBot.available_currency_pairs
+    @enabled_banks = CurrencyRatesBot.enabled_banks
     @bank_urls = CurrencyRatesBot.currency_rates_bank_urls
   end
 
   def process
-    currency_rates = build_params(bank_urls)
+    currency_rates = build_params
     update_and_notify_from(currency_rates)
     CurrencyRatesBot.logger.info('[Updater] Currency rates successfully updated and notified')
   rescue => e
@@ -39,46 +40,49 @@ class Updater
   def update_and_notify_from(currency_rates)
     currency_rates.each do |bank_name, exchange_method_params|
       exchange_method_params.each do |exchange_method, rates|
-        buy_amount = fetch_amount_from(rates, BUY)
-        sell_amount = fetch_amount_from(rates, SELL)
+        available_currency_pairs.each do |currency_pair|
+          first_currency, second_currency = currency_pair.split('/')
+          buy_amount = fetch_amount_from(first_currency, second_currency, rates, BUY)
+          sell_amount = fetch_amount_from(first_currency, second_currency, rates, SELL)
 
-        update_currency_rate(bank_name, exchange_method, buy_amount, sell_amount)
-        process_currency_rate_for_history(bank_name, exchange_method, buy_amount, sell_amount)
+          update_currency_rate(currency_pair, bank_name, exchange_method, buy_amount, sell_amount)
+          process_currency_rate_for_history(currency_pair, bank_name, exchange_method, buy_amount, sell_amount)
 
-        notify_users(bank_name, exchange_method, buy_amount, sell_amount)
+          notify_users(currency_pair, bank_name, exchange_method, buy_amount, sell_amount)
+        end
       end
     end
   end
 
-  def fetch_amount_from(rates, type)
-    rates.dig(DEFAULT_CURRENCY_PAIR.split('/').first, DEFAULT_CURRENCY_PAIR.split('/').last, type)
+  def fetch_amount_from(first_currency, second_currency, rates, type)
+    rates.dig(first_currency, second_currency, type)
   end
 
-  def update_currency_rate(bank_name, ex_method, buy_am, sell_am)
-    currency_rate = CurrencyRate.find_by(currency_pair: DEFAULT_CURRENCY_PAIR,
+  def update_currency_rate(cur_pair, bank_name, ex_method, buy_am, sell_am)
+    currency_rate = CurrencyRate.find_by(currency_pair: cur_pair,
                                          bank: bank_name,
                                          exchange_method: ex_method)
 
     if currency_rate.present?
       currency_rate.update(buy_amount: buy_am, sell_amount: sell_am)
     else
-      CurrencyRate.create(currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_method))
+      CurrencyRate.create(currency_rates_params_for_db(cur_pair, bank_name, buy_am, sell_am, ex_method))
     end
   end
 
-  def process_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am)
-    currency_rate_history = CurrencyRatesHistory.where(currency_pair: DEFAULT_CURRENCY_PAIR,
+  def process_currency_rate_for_history(cur_pair, bank_name, ex_method, buy_am, sell_am)
+    currency_rate_history = CurrencyRatesHistory.where(currency_pair: cur_pair,
                                                        bank: bank_name,
                                                        exchange_method: ex_method)&.last
 
-    return create_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am) unless currency_rate_history.present?
+    return create_currency_rate_for_history(cur_pair, bank_name, ex_method, buy_am, sell_am) unless currency_rate_history.present?
     return if equal_amounts?(currency_rate_history, buy_am, sell_am)
 
-    create_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am)
+    create_currency_rate_for_history(cur_pair, bank_name, ex_method, buy_am, sell_am)
   end
 
-  def create_currency_rate_for_history(bank_name, ex_method, buy_am, sell_am)
-    CurrencyRatesHistory.create(currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_method))
+  def create_currency_rate_for_history(cur_pair, bank_name, ex_method, buy_am, sell_am)
+    CurrencyRatesHistory.create(currency_rates_params_for_db(cur_pair, bank_name, buy_am, sell_am, ex_method))
   end
 
   def equal_amounts?(currency_rate_history, buy_am, sell_am)
@@ -86,9 +90,9 @@ class Updater
       currency_rate_history.sell_amount == sell_am&.to_f
   end
 
-  def currency_rates_params_for_db(bank_name, buy_am, sell_am, ex_method)
+  def currency_rates_params_for_db(cur_pair, bank_name, buy_am, sell_am, ex_method)
     {
-      currency_pair: DEFAULT_CURRENCY_PAIR,
+      currency_pair: cur_pair,
       bank: bank_name,
       buy_amount: buy_am,
       sell_amount: sell_am,
@@ -96,9 +100,9 @@ class Updater
     }.compact_blank
   end
 
-  def notify_users(bank_name, exchange_method, buy_amount, sell_amount)
+  def notify_users(cur_pair, bank_name, exchange_method, buy_amount, sell_amount)
     Notifier.new(bot,
-                 DEFAULT_CURRENCY_PAIR,
+                 cur_pair,
                  bank_name,
                  exchange_method,
                  buy_amount,

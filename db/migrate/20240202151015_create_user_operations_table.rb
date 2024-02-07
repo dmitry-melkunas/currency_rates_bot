@@ -7,9 +7,10 @@ class CreateUserOperationsTable < ActiveRecord::Migration[7.1]
     create_table :user_operations do |t|
       t.belongs_to :user
       t.bigint     :chat_id
-      t.string     :currency_pair, index: true
-      t.string     :bank, index: true
-      t.string     :exchange_method, index: true
+      t.string     :enabled,          default: false
+      t.string     :currency_pair,    index: true
+      t.string     :bank,             index: true
+      t.string     :exchange_method,  index: true
       t.float      :rate_amount
       t.integer    :deposit_amount
       t.string     :deposit_currency, limit: 3

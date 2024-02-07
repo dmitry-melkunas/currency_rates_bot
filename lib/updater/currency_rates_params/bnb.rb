@@ -2,9 +2,10 @@
 
 module CurrencyRatesParams
   class Bnb
-    attr_reader :urls
+    attr_reader :available_currency_pairs, :urls
 
-    def initialize(urls)
+    def initialize(available_currency_pairs, urls)
+      @available_currency_pairs = available_currency_pairs
       @urls = urls
     end
 
@@ -48,8 +49,12 @@ module CurrencyRatesParams
 
     def prepare_amounts_in(currency_rates)
       currency_rates.each_value do |rates|
-        rates['EUR']['USD']['BUY']  = rates.dig('EUR', 'USD', 'BUY').to_f
-        rates['EUR']['USD']['SALE'] = rates.dig('EUR', 'USD', 'SALE').to_f
+        available_currency_pairs.each do |currency_pair|
+          first_currency, second_currency = currency_pair.split('/')
+
+          rates[first_currency][second_currency]['BUY']  = rates.dig(first_currency, second_currency, 'BUY').to_f
+          rates[first_currency][second_currency]['SALE'] = rates.dig(first_currency, second_currency, 'SALE').to_f
+        end
       end
 
       currency_rates

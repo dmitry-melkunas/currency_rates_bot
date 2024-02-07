@@ -3,9 +3,9 @@ telegram:
   bots:
     default:
       token: ''
-    error_notifier:
-      token: ''
 currency_rates:
+  available_currency_pairs: [EUR/USD, USD/BYN, EUR/BYN]
+  enabled_banks: [bnb]
   urls:
     bnb:
       in_bank: ''

@@ -6,15 +6,14 @@ require_relative 'listener/handler'
 class Listener
   include Handler
 
-  attr_reader :token, :token_for_errors
+  attr_reader :token
 
   def self.run
     new.listener
   end
 
   def initialize
-    @token            = CurrencyRatesBot.telegram_bot_token
-    @token_for_errors = CurrencyRatesBot.error_notifier_telegram_bot_token
+    @token = CurrencyRatesBot.telegram_bot_token
   end
 
   def listener

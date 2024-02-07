@@ -14,11 +14,11 @@ class UserOperation < ActiveRecord::Base
   end
 
   def define_rate_amount
-    currency_pair_array = currency_pair.split('/')
+    first_currency, second_currency = currency_pair.split('/')
 
-    if currency_pair_array.index(deposit_currency).zero? && currency_pair_array.index(final_currency) == 1
+    if first_currency == deposit_currency && second_currency == final_currency
       'buy_amount'
-    elsif currency_pair_array.index(final_currency).zero? && currency_pair_array.index(deposit_currency) == 1
+    elsif first_currency == final_currency && second_currency == deposit_currency
       'sell_amount'
     end
   end

@@ -48,16 +48,20 @@ module CurrencyRatesBot
       I18n.backend.load_translations
     end
 
+    def available_currency_pairs
+      @available_currency_pairs ||= CurrencyRatesBot::Settings.currency_rates.available_currency_pairs
+    end
+
+    def enabled_banks
+      @enabled_banks ||= CurrencyRatesBot::Settings.currency_rates.enabled_banks
+    end
+
     def currency_rates_bank_urls
-      @currency_rates_urls ||= CurrencyRatesBot::Settings.currency_rates.urls
+      @currency_rates_bank_urls ||= CurrencyRatesBot::Settings.currency_rates.urls
     end
 
     def telegram_bot_token
       @telegram_bot_token ||= CurrencyRatesBot::Settings.telegram.bots.default.token
-    end
-
-    def error_notifier_telegram_bot_token
-      @error_notifier_telegram_bot_token ||= CurrencyRatesBot::Settings.telegram.bots.error_notifier.token
     end
 
     def logger

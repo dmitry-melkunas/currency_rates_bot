@@ -9,13 +9,13 @@ class Listener
           Response.standard_message(bot,
                                     user_info['chat_id'],
                                     I18n.t('welcome',
-                                           name: user_info['first_name'].presence || user_info['username'],
+                                           name: user_info['username'],
                                            locale: user_info['language']))
         when '/end'
           Response.standard_message(bot,
                                     user_info['chat_id'],
                                     I18n.t('bye',
-                                           name: user_info['first_name'].presence || user_info['username'],
+                                           name: user_info['username'],
                                            locale: user_info['language']))
         else
           Response.standard_message(bot,

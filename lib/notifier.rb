@@ -19,34 +19,35 @@ class Notifier
     return unless enabled_users.present?
 
     enabled_users.each do |user|
-      last_user_operation = user.user_operations.where(currency_pair: cur_pair,
-                                                       bank: bank_name,
-                                                       exchange_method: ex_method).last
+      user_operations = user.user_operations.where(enabled: true,
+                                                   currency_pair: cur_pair,
+                                                   bank: bank_name,
+                                                   exchange_method: ex_method)
 
-      next unless last_user_operation.present?
+      next unless user_operations.present?
 
-      check_rates_and_notify(last_user_operation)
+      check_rates_and_notify(user_operations)
     end
   end
 
   private
 
-  def check_rates_and_notify(user_operation)
-    case user_operation.define_rate_amount
-    when 'buy_amount'  then notify_user(user_operation) if user_operation.rate_amount > sell_amount
-    when 'sell_amount' then notify_user(user_operation) if user_operation.rate_amount < buy_amount
+  def check_rates_and_notify(user_operations)
+    user_operations.each do |user_operation|
+      case user_operation.define_rate_amount
+      when 'buy_amount'  then notify_user(user_operation) if user_operation.rate_amount > sell_amount
+      when 'sell_amount' then notify_user(user_operation) if user_operation.rate_amount < buy_amount
+      end
     end
   end
 
   def notify_user(user_operation)
-    language = user_language(user_operation)
-
     Listener::Response.standard_message(bot,
                                         user_operation.chat_id.presence || user_operation.user.chat_id,
                                         I18n.t('buy_sell_notification_message',
                                                buy_currency: user_operation.deposit_currency,
                                                sell_currency: user_operation.final_currency,
-                                               locale: language))
+                                               locale: user_language(user_operation)))
   end
 
   def user_language(user_operation)

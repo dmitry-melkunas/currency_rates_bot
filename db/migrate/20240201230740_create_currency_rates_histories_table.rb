@@ -5,8 +5,8 @@ class CreateCurrencyRatesHistoriesTable < ActiveRecord::Migration[7.1]
     return if table_exists? :currency_rates_histories
 
     create_table :currency_rates_histories do |t|
-      t.string :currency_pair, index: true
-      t.string :bank, index: true
+      t.string :currency_pair,   index: true
+      t.string :bank,            index: true
       t.float  :buy_amount
       t.float  :sell_amount
       t.string :exchange_method, index: true
