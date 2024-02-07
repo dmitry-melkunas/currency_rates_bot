@@ -27,7 +27,7 @@ class Listener
       end
 
       def prepare_user_attributes(user_attributes)
-        user_attributes.except('id', 'enabled', 'created_at', 'updated_at') # do not remember change here, if add or remove columns in users table
+        user_attributes.except('id', 'enabled', 'admin', 'state', 'created_at', 'updated_at') # do not remember change here, if add or remove columns in users table
       end
 
       def user_params_for_db(user_info)
