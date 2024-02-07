@@ -44,6 +44,7 @@ class Updater
           first_currency, second_currency = currency_pair.split('/')
           buy_amount = fetch_amount_from(first_currency, second_currency, rates, BUY)
           sell_amount = fetch_amount_from(first_currency, second_currency, rates, SELL)
+          next if buy_amount.blank? || sell_amount.blank?
 
           update_currency_rate(currency_pair, bank_name, exchange_method, buy_amount, sell_amount)
           process_currency_rate_for_history(currency_pair, bank_name, exchange_method, buy_amount, sell_amount)
