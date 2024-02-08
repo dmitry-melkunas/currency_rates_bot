@@ -41,9 +41,7 @@ class Updater
     currency_rates.each do |bank_name, exchange_method_params|
       exchange_method_params.each do |exchange_method, rates|
         available_currency_pairs.each do |currency_pair|
-          first_currency, second_currency = currency_pair.split('/')
-          buy_amount = fetch_amount_from(first_currency, second_currency, rates, BUY)
-          sell_amount = fetch_amount_from(first_currency, second_currency, rates, SELL)
+          buy_amount, sell_amount = fetch_amounts_from(rates, currency_pair)
           next if buy_amount.blank? || sell_amount.blank?
 
           update_currency_rate(currency_pair, bank_name, exchange_method, buy_amount, sell_amount)
@@ -55,8 +53,10 @@ class Updater
     end
   end
 
-  def fetch_amount_from(first_currency, second_currency, rates, type)
-    rates.dig(first_currency, second_currency, type)
+  def fetch_amounts_from(rates, currency_pair)
+    first_currency, second_currency = currency_pair.split('/')
+
+    [rates.dig(first_currency, second_currency, BUY), rates.dig(first_currency, second_currency, SELL)]
   end
 
   def update_currency_rate(cur_pair, bank_name, ex_method, buy_am, sell_am)
