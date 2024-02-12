@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   validates :language, inclusion: CurrencyRatesBot::AVAILABLE_LANGUAGES, length: { maximum: 2 }
 
   scope :enabled_users, -> { where(enabled: true) }
+  scope :admins, -> { where(admin: true) }
 
   def enabled?
     enabled == true
