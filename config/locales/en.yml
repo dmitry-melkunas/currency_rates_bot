@@ -4,4 +4,4 @@ en:
   unknown_message_type: 'Unknown message type!'
   unclear_message: 'Unclear message!'
   access_denied: 'Access denied! Contact to admin'
-  buy_sell_notification_message: 'You can buy %{buy_currency} for %{sell_currency}'
+  buy_sell_notification_message: 'You can buy %{buy_amount_and_currency} for %{sell_amount_and_currency}. The profit from the deposit amount %{deposit_amount_and_currency} is %{profit_amount_and_currency}'

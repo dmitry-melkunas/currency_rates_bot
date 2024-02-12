@@ -44,10 +44,30 @@ class Notifier
   def notify_user(user_operation)
     Listener::Response.standard_message(bot,
                                         user_operation.chat_id.presence || user_operation.user.chat_id,
-                                        I18n.t('buy_sell_notification_message',
-                                               buy_currency: user_operation.deposit_currency,
-                                               sell_currency: user_operation.final_currency,
-                                               locale: user_language(user_operation)))
+                                        build_message(user_operation))
+  end
+
+  def build_message(user_operation)
+    update_currency_rates_for_money
+
+    deposit_money = Money.new(user_operation.deposit_amount, user_operation.deposit_currency)
+    final_money = Money.new(user_operation.final_amount, user_operation.final_currency)
+    converted_money = final_money.exchange_to(user_operation.deposit_currency)
+    profit_money = converted_money - deposit_money
+
+    I18n.t('buy_sell_notification_message',
+           buy_amount_and_currency: "#{converted_money} #{user_operation.deposit_currency}",
+           sell_amount_and_currency: "#{final_money} #{user_operation.final_currency}",
+           deposit_amount_and_currency: "#{deposit_money} #{user_operation.deposit_currency}",
+           profit_amount_and_currency: "#{profit_money} #{user_operation.deposit_currency}",
+           locale: user_language(user_operation))
+  end
+
+  def update_currency_rates_for_money
+    first_currency, second_currency = cur_pair.split('/')
+
+    Money.add_rate(first_currency, second_currency, buy_amount)
+    Money.add_rate(second_currency, first_currency, 1 / sell_amount)
   end
 
   def user_language(user_operation)

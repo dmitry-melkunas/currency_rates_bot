@@ -6,6 +6,7 @@ require 'erb'
 require 'logger'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/numeric/time'
+require 'money'
 
 # for debugging
 require 'pry'
@@ -25,6 +26,7 @@ module CurrencyRatesBot
       load_settings
       establish_db_connection
       define_internalization
+      define_money
     end
 
     def establish_db_connection(config = nil)
@@ -46,6 +48,11 @@ module CurrencyRatesBot
       I18n.available_locales = AVAILABLE_LANGUAGES
       I18n.default_locale = :en
       I18n.backend.load_translations
+    end
+
+    def define_money
+      Money.locale_backend = :i18n
+      Money.rounding_mode = BigDecimal::ROUND_HALF_UP
     end
 
     def available_currency_pairs

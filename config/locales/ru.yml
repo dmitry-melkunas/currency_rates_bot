@@ -4,4 +4,4 @@ ru:
   unknown_message_type: 'Неизвестный тип сообщения!'
   unclear_message: 'Непонятное сообщение!'
   access_denied: 'Доступ запрещен! Обратитесь к администратору'
-  buy_sell_notification_message: 'Вы можете купить %{buy_currency} за %{sell_currency}'
+  buy_sell_notification_message: 'Вы можете купить %{buy_amount_and_currency} за %{sell_amount_and_currency}. Прибыль от первоначальной суммы %{deposit_amount_and_currency} составляет %{profit_amount_and_currency}'
