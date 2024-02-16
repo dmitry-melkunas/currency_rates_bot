@@ -65,6 +65,8 @@ class Updater
                                          exchange_method: ex_method)
 
     if currency_rate.present?
+      return if equal_amounts?(currency_rate, buy_am, sell_am)
+
       currency_rate.update(buy_amount: buy_am, sell_amount: sell_am)
     else
       CurrencyRate.create(currency_rates_params_for_db(cur_pair, bank_name, buy_am, sell_am, ex_method))
