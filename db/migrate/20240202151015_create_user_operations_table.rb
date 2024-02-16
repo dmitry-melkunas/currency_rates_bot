@@ -16,6 +16,7 @@ class CreateUserOperationsTable < ActiveRecord::Migration[7.1]
       t.string     :deposit_currency, limit: 3
       t.integer    :final_amount
       t.string     :final_currency, limit: 3
+      t.integer    :profit_amount
 
       t.timestamps
     end
